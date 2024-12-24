@@ -1,0 +1,108 @@
+import java.util.Scanner;
+
+class HotelManagement {
+
+    private String[] rooms;
+    private int totalRooms;
+
+    // Constructor to initialize hotel with a given number of rooms
+    public HotelManagement(int totalRooms) {
+        this.totalRooms = totalRooms;
+        this.rooms = new String[totalRooms]; // All rooms are initially available (null)
+    }
+
+    // Display the current status of all rooms
+    public void displayRooms() {
+        System.out.println("\nRoom Status:");
+        for (int i = 0; i < totalRooms; i++) {
+            if (rooms[i] == null) {
+                System.out.println("Room " + (i + 1) + ": Available");
+            } else {
+                System.out.println("Room " + (i + 1) + ": Occupied by " + rooms[i]);
+            }
+        }
+    }
+
+    // Check-in a customer to the first available room
+    public void checkIn(String customerName) {
+        for (int i = 0; i < totalRooms; i++) {
+            if (rooms[i] == null) {
+                rooms[i] = customerName;
+                System.out.println("Customer " + customerName + " has been checked into Room " + (i + 1) + ".");
+                return;
+            }
+        }
+        System.out.println("Sorry, no rooms are available.");
+    }
+
+    // Check-out a customer
+    public void checkOut(String customerName) {
+        for (int i = 0; i < totalRooms; i++) {
+            if (rooms[i] != null && rooms[i].equals(customerName)) {
+                rooms[i] = null;
+                System.out.println("Customer " + customerName + " has checked out from Room " + (i + 1) + ".");
+                return;
+            }
+        }
+        System.out.println("No reservation found for " + customerName + ".");
+    }
+
+    // Add a new room to the hotel
+    public void addRoom() {
+        String[] newRooms = new String[totalRooms + 1];
+        System.arraycopy(rooms, 0, newRooms, 0, totalRooms);
+        newRooms[totalRooms] = null; // New room is initially available
+        rooms = newRooms;
+        totalRooms++;
+        System.out.println("A new room has been added. Total rooms: " + totalRooms);
+    }
+
+    // Main menu for user interaction
+    public void menu() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\nHotel Management System");
+            System.out.println("1. Display Rooms");
+            System.out.println("2. Check-in a Customer");
+            System.out.println("3. Check-out a Customer");
+            System.out.println("4. Add a Room");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline
+
+            switch (choice) {
+                case 1:
+                    displayRooms();
+                    break;
+                case 2:
+                    System.out.print("Enter customer name for check-in: ");
+                    String customerCheckIn = scanner.nextLine();
+                    checkIn(customerCheckIn);
+                    break;
+                case 3:
+                    System.out.print("Enter customer name for check-out: ");
+                    String customerCheckOut = scanner.nextLine();
+                    checkOut(customerCheckOut);
+                    break;
+                case 4:
+                    addRoom();
+                    break;
+                case 5:
+                    System.out.println("Exiting the system.");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        // Create a hotel with 5 rooms
+        HotelManagement hotel = new HotelManagement(5);
+
+        // Show the main menu and let the user interact
+        hotel.menu();
+    }
+}
